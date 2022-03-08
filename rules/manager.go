@@ -19,6 +19,7 @@ import (
 	"math"
 	"net/url"
 	"sort"
+	"strconv"
 	"sync"
 	"time"
 
@@ -962,6 +963,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 	defer m.mtx.Unlock()
 	level.Info(m.logger).Log("msg", "in manager update method")
 	groups, errs := m.LoadGroups(interval, externalLabels, externalURL, files...)
+	level.Info(m.logger).Log("msg", "loaded number of groups:"+strconv.Itoa(groups))
 	if errs != nil {
 		for _, e := range errs {
 			level.Error(m.logger).Log("msg", "loading groups failed", "err", e)
@@ -982,6 +984,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 
 		if ok && oldg.Equals(newg) {
 			groups[gn] = oldg
+			level.Info(m.logger).Log("msg", "nothing to do with group:"+newg.name)
 			continue
 		}
 
@@ -999,7 +1002,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 			newg.run(m.opts.Context)
 		}(newg)
 	}
-
+	level.Info(m.logger).Log("msg", "before remaining old groups")
 	// Stop remaining old groups.
 	wg.Add(len(m.groups))
 	for n, oldg := range m.groups {
@@ -1025,7 +1028,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 
 	wg.Wait()
 	m.groups = groups
-
+	level.Info(m.logger).Log("msg", "out of manager update method")
 	return nil
 }
 
