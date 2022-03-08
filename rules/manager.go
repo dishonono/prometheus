@@ -960,7 +960,7 @@ func (m *Manager) Stop() {
 func (m *Manager) Update(interval time.Duration, files []string, externalLabels labels.Labels, externalURL string) error {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
-
+	level.Info(m.logger).Log("msg", "in manager update method")
 	groups, errs := m.LoadGroups(interval, externalLabels, externalURL, files...)
 	if errs != nil {
 		for _, e := range errs {
@@ -1004,6 +1004,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 	wg.Add(len(m.groups))
 	for n, oldg := range m.groups {
 		go func(n string, g *Group) {
+			level.Info(m.logger).Log("msg", "trying to stop group:"+n)
 			g.markStale = true
 			g.stop()
 			if m := g.metrics; m != nil {
@@ -1018,6 +1019,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 				m.GroupSamples.DeleteLabelValues((n))
 			}
 			wg.Done()
+			level.Info(m.logger).Log("msg", "after stop group:"+n)
 		}(n, oldg)
 	}
 
