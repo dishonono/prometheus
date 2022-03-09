@@ -996,7 +996,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 		wg.Add(1)
 		go func(newg *Group) {
 			if ok {
-				level.Info(m.logger).Log("msg", "trying to stop group 999:"+n)
+				level.Info(m.logger).Log("msg", "trying to stop group 999:"+oldg.name)
 				oldg.stop()
 				newg.CopyState(oldg)
 			}
