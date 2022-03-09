@@ -393,6 +393,7 @@ func (g *Group) run(ctx context.Context) {
 		// have updated the latest values, on which some alerts might depend.
 		select {
 		case <-g.done:
+			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 395 %s", g.name))
 			return
 		case <-tick.C:
 			missed := (time.Since(evalTimestamp) / g.interval) - 1
@@ -411,10 +412,12 @@ func (g *Group) run(ctx context.Context) {
 	for {
 		select {
 		case <-g.done:
+			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 416 %s", g.name))
 			return
 		default:
 			select {
 			case <-g.done:
+				level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 420 %s", g.name))
 				return
 			case <-tick.C:
 				missed := (time.Since(evalTimestamp) / g.interval) - 1
@@ -430,6 +433,7 @@ func (g *Group) run(ctx context.Context) {
 }
 
 func (g *Group) stop() {
+	level.Info(g.logger).Log("msg", fmt.Sprintf("in group strop %s", g.name))
 	close(g.done)
 	<-g.terminated
 }
@@ -580,6 +584,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 	for i, rule := range g.rules {
 		select {
 		case <-g.done:
+			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 587 %s", g.name))
 			return
 		default:
 		}
@@ -963,7 +968,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 	defer m.mtx.Unlock()
 	level.Info(m.logger).Log("msg", "in manager update method")
 	groups, errs := m.LoadGroups(interval, externalLabels, externalURL, files...)
-	level.Info(m.logger).Log("msg", fmt.Sprintf("loaded number of groups:%d", groups))
+	level.Info(m.logger).Log("msg", fmt.Sprintf("loaded number of groups:%d", len(groups)))
 	if errs != nil {
 		for _, e := range errs {
 			level.Error(m.logger).Log("msg", "loading groups failed", "err", e)
@@ -991,6 +996,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 		wg.Add(1)
 		go func(newg *Group) {
 			if ok {
+				level.Info(m.logger).Log("msg", "trying to stop group 999:"+n)
 				oldg.stop()
 				newg.CopyState(oldg)
 			}
@@ -1007,7 +1013,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 	wg.Add(len(m.groups))
 	for n, oldg := range m.groups {
 		go func(n string, g *Group) {
-			level.Info(m.logger).Log("msg", "trying to stop group:"+n)
+			level.Info(m.logger).Log("msg", "trying to stop group 1015:"+n)
 			g.markStale = true
 			g.stop()
 			if m := g.metrics; m != nil {
