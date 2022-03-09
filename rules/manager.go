@@ -15,11 +15,11 @@ package rules
 
 import (
 	"context"
+	"fmt"
 	html_template "html/template"
 	"math"
 	"net/url"
 	"sort"
-	"strconv"
 	"sync"
 	"time"
 
@@ -963,7 +963,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 	defer m.mtx.Unlock()
 	level.Info(m.logger).Log("msg", "in manager update method")
 	groups, errs := m.LoadGroups(interval, externalLabels, externalURL, files...)
-	level.Info(m.logger).Log("msg", "loaded number of groups:"+strconv.Itoa(groups))
+	level.Info(m.logger).Log("msg", fmt.Sprintf("loaded number of groups:%d", groups))
 	if errs != nil {
 		for _, e := range errs {
 			level.Error(m.logger).Log("msg", "loading groups failed", "err", e)
