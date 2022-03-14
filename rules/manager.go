@@ -433,9 +433,10 @@ func (g *Group) run(ctx context.Context) {
 }
 
 func (g *Group) stop() {
-	level.Info(g.logger).Log("msg", fmt.Sprintf("in group strop %s", g.name))
+	level.Info(g.logger).Log("msg", fmt.Sprintf("in group stop %s", g.name))
 	close(g.done)
 	<-g.terminated
+	level.Info(g.logger).Log("msg", fmt.Sprintf("out of group stop %s", g.name))
 }
 
 func (g *Group) hash() uint64 {
@@ -581,10 +582,11 @@ func (g *Group) CopyState(from *Group) {
 // Eval runs a single evaluation cycle in which all rules are evaluated sequentially.
 func (g *Group) Eval(ctx context.Context, ts time.Time) {
 	var samplesTotal float64
+	level.Info(g.logger).Log("msg", fmt.Sprintf("in group eval loop 585 %s", g.name))
 	for i, rule := range g.rules {
 		select {
 		case <-g.done:
-			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 587 %s", g.name))
+			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 589 %s", g.name))
 			return
 		default:
 		}
@@ -684,6 +686,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 				}
 			}
 		}(i, rule)
+		level.Info(g.logger).Log("msg", fmt.Sprintf("out group eval loop 585 %s", g.name))
 	}
 	if g.metrics != nil {
 		g.metrics.GroupSamples.WithLabelValues(GroupKey(g.File(), g.Name())).Set(samplesTotal)
