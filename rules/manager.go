@@ -410,6 +410,7 @@ func (g *Group) run(ctx context.Context) {
 	}
 
 	for {
+		level.Info(g.logger).Log("msg", fmt.Sprintf("in the forloop %s", g.name))
 		select {
 		case <-g.done:
 			level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 416 %s", g.name))
@@ -420,8 +421,10 @@ func (g *Group) run(ctx context.Context) {
 				level.Info(g.logger).Log("msg", fmt.Sprintf("got done signal 420 %s", g.name))
 				return
 			case <-tick.C:
+				level.Info(g.logger).Log("msg", fmt.Sprintf("got tick signal 423 %s", g.name))
 				missed := (time.Since(evalTimestamp) / g.interval) - 1
 				if missed > 0 {
+					level.Info(g.logger).Log("msg", fmt.Sprintf("in missed 426 %s", g.name))
 					g.metrics.IterationsMissed.WithLabelValues(GroupKey(g.file, g.name)).Add(float64(missed))
 					g.metrics.IterationsScheduled.WithLabelValues(GroupKey(g.file, g.name)).Add(float64(missed))
 				}
@@ -686,8 +689,10 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 				}
 			}
 		}(i, rule)
-		level.Info(g.logger).Log("msg", fmt.Sprintf("out group eval loop 585 %s", g.name))
 	}
+
+	level.Info(g.logger).Log("msg", fmt.Sprintf("out group eval loop 585 %s", g.name))
+
 	if g.metrics != nil {
 		g.metrics.GroupSamples.WithLabelValues(GroupKey(g.File(), g.Name())).Set(samplesTotal)
 	}
