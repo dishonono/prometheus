@@ -951,7 +951,7 @@ func (m *Manager) Stop() {
 	m.mtx.Lock()
 	defer m.mtx.Unlock()
 
-	level.Info(m.logger).Log("msg", "Stopping rule manager...")
+	level.Info(m.logger).Log("msg", fmt.Sprintf("Stopping rule manager... will stop %d groups", len(m.groups)))
 
 	for _, eg := range m.groups {
 		eg.stop()
@@ -1037,7 +1037,7 @@ func (m *Manager) Update(interval time.Duration, files []string, externalLabels 
 
 	wg.Wait()
 	m.groups = groups
-	level.Info(m.logger).Log("msg", "out of manager update method")
+	level.Info(m.logger).Log("msg", fmt.Sprintf("out of manager update method with:%d", len(groups)))
 	return nil
 }
 
