@@ -959,7 +959,15 @@ func (m *Manager) Stop() {
 	level.Info(m.logger).Log("msg", fmt.Sprintf("Stopping rule manager... will stop %d groups", len(m.groups)))
 
 	for _, eg := range m.groups {
-		eg.stop()
+		level.Info(eg.logger).Log("msg", fmt.Sprintf("closing done channel for %s", g.name))
+		close(eg.done)
+		level.Info(eg.logger).Log("msg", fmt.Sprintf("closed done channel for  %s", g.name))
+	}
+
+	for _, eg := range m.groups {
+		level.Info(eg.logger).Log("msg", fmt.Sprintf("waiting terminat from %s", g.name))
+		<-eg.terminated
+		level.Info(eg.logger).Log("msg", fmt.Sprintf("got termiate from %s", g.name))
 	}
 
 	// Shut down the groups waiting multiple evaluation intervals to write
