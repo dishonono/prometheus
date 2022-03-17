@@ -967,7 +967,7 @@ func (m *Manager) Stop() {
 	for _, eg := range m.groups {
 		level.Info(eg.logger).Log("msg", fmt.Sprintf("waiting terminat from %s", eg.name))
 		<-eg.terminated
-		level.Info(eg.logger).Log("msg", fmt.Sprintf("got termiate from %s", efg.name))
+		level.Info(eg.logger).Log("msg", fmt.Sprintf("got termiate from %s", eg.name))
 	}
 
 	// Shut down the groups waiting multiple evaluation intervals to write
