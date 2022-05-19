@@ -653,8 +653,8 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 						level.Warn(g.logger).Log("msg", "Rule evaluation result discarded", "err", err, "sample", s)
 					}
 				} else {
-					buf := [1024]byte{}
-					seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
+					//buf := [1024]byte{}
+					//seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
 				}
 			}
 			if numOutOfOrder > 0 {
