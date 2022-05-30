@@ -15,6 +15,7 @@ package rules
 
 import (
 	"context"
+	"encoding/json"
 	html_template "html/template"
 	"math"
 	"net/url"
@@ -652,8 +653,8 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 						level.Warn(g.logger).Log("msg", "Rule evaluation result discarded", "err", err, "sample", s)
 					}
 				} else {
-					// buf := [1024]byte{}
-					// seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
+					buf := [1024]byte{}
+					seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
 				}
 			}
 			if numOutOfOrder > 0 {
@@ -661,6 +662,10 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 			}
 			if numDuplicates > 0 {
 				level.Warn(g.logger).Log("msg", "Error on ingesting results from rule evaluation with different value but same timestamp", "numDropped", numDuplicates)
+			}
+			bbb, e3 := json.Marshal(seriesReturned)
+			if e3 == nil {
+				level.Debug(g.logger).Log("msg", "seriesreturned:"+string(bbb))
 			}
 
 			for metric, lset := range g.seriesInPreviousEval[i] {
