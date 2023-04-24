@@ -1,0 +1,56 @@
+syntax = "proto3";
+package prometheus;
+
+option go_package = "prompb";
+
+
+import "types.proto";
+//import "gogoproto/gogo.proto";
+
+message LabelsPerSeries{
+    repeated Labels LabelsArray= 1;
+}
+
+message Group {
+    repeated LabelsPerSeries seriesInPreviousEval = 1;
+    repeated Labels staleSeries =2;
+    int64 evaluationTime =3;
+	int64 lastEvaluation       =4 ;
+	bool shouldRestore        =5;
+	bool markStale            =6;
+	repeated Rule Rules           =7;
+}
+enum RuleHealth {
+    HealthUnknown =0;
+	HealthGood    =1;
+	HealthBad     =2;
+}
+
+message Rule {
+	string Name               =1;
+	bool Restored            =2;
+	int64 EvaluationDuration  =3;
+	int64 EvaluationTimestamp =4;
+	RuleHealth Health        =5;
+    string LastError           =6;
+	repeated Alert Active = 7 ;
+}
+
+enum AlertState {
+    StateInactive = 0;
+    StatePending =1 ;
+    StateFiring =2;
+}
+
+message Alert  {
+    uint64 Id =1;
+	Labels Labels      =2;
+	Labels Annotations =3;
+	double Value = 4;
+	int64 ActiveAt   =5;
+	int64 FiredAt    =6;
+	int64 ResolvedAt =7;
+	int64 LastSentAt =8;
+	int64 ValidUntil =9;
+    AlertState State =10;
+}
