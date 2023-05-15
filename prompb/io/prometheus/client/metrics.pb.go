@@ -24,7 +24,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type MetricType int32
 
@@ -91,7 +91,7 @@ func (m *LabelPair) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_LabelPair.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -145,7 +145,7 @@ func (m *Gauge) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Gauge.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -193,7 +193,7 @@ func (m *Counter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Counter.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -248,7 +248,7 @@ func (m *Quantile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Quantile.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -304,7 +304,7 @@ func (m *Summary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Summary.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -365,7 +365,7 @@ func (m *Untyped) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Untyped.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -439,7 +439,7 @@ func (m *Histogram) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Histogram.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -580,7 +580,7 @@ func (m *Bucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Bucket.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -655,7 +655,7 @@ func (m *BucketSpan) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_BucketSpan.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -711,7 +711,7 @@ func (m *Exemplar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Exemplar.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -778,7 +778,7 @@ func (m *Metric) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Metric.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -870,7 +870,7 @@ func (m *MetricFamily) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return xxx_messageInfo_MetricFamily.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := m.MarshalTo(b)
 		if err != nil {
 			return nil, err
 		}
@@ -933,9 +933,7 @@ func init() {
 	proto.RegisterType((*MetricFamily)(nil), "io.prometheus.client.MetricFamily")
 }
 
-func init() {
-	proto.RegisterFile("io/prometheus/client/metrics.proto", fileDescriptor_d1e5ddb18987a258)
-}
+func init() { proto.RegisterFile("io/prometheus/client/metrics.proto", fileDescriptor_d1e5ddb18987a258) }
 
 var fileDescriptor_d1e5ddb18987a258 = []byte{
 	// 923 bytes of a gzipped FileDescriptorProto
@@ -1002,7 +1000,7 @@ var fileDescriptor_d1e5ddb18987a258 = []byte{
 func (m *LabelPair) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1010,40 +1008,32 @@ func (m *LabelPair) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LabelPair) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *LabelPair) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Value)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Value)))
+		i += copy(dAtA[i:], m.Value)
 	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Gauge) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1051,32 +1041,26 @@ func (m *Gauge) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Gauge) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Gauge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if m.Value != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i--
 		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i += 8
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Counter) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1084,44 +1068,36 @@ func (m *Counter) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Counter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Counter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Value != 0 {
+		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i += 8
 	}
 	if m.Exemplar != nil {
-		{
-			size, err := m.Exemplar.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Exemplar.Size()))
+		n1, err1 := m.Exemplar.MarshalTo(dAtA[i:])
+		if err1 != nil {
+			return 0, err1
+		}
+		i += n1
 	}
-	if m.Value != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i--
-		dAtA[i] = 0x9
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Quantile) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1129,38 +1105,32 @@ func (m *Quantile) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Quantile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Quantile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Quantile != 0 {
+		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Quantile))))
+		i += 8
 	}
 	if m.Value != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i--
 		dAtA[i] = 0x11
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i += 8
 	}
-	if m.Quantile != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Quantile))))
-		i--
-		dAtA[i] = 0x9
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Summary) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1168,51 +1138,43 @@ func (m *Summary) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Summary) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Summary) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Quantile) > 0 {
-		for iNdEx := len(m.Quantile) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Quantile[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
+	if m.SampleCount != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.SampleCount))
 	}
 	if m.SampleSum != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleSum))))
-		i--
 		dAtA[i] = 0x11
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleSum))))
+		i += 8
 	}
-	if m.SampleCount != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.SampleCount))
-		i--
-		dAtA[i] = 0x8
+	if len(m.Quantile) > 0 {
+		for _, msg := range m.Quantile {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Untyped) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1220,32 +1182,26 @@ func (m *Untyped) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Untyped) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Untyped) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
 	if m.Value != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i--
 		dAtA[i] = 0x9
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i += 8
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Histogram) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1253,165 +1209,151 @@ func (m *Histogram) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Histogram) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Histogram) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.PositiveCount) > 0 {
-		for iNdEx := len(m.PositiveCount) - 1; iNdEx >= 0; iNdEx-- {
-			f2 := math.Float64bits(float64(m.PositiveCount[iNdEx]))
-			i -= 8
-			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f2))
-		}
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.PositiveCount)*8))
-		i--
-		dAtA[i] = 0x72
-	}
-	if len(m.PositiveDelta) > 0 {
-		var j3 int
-		dAtA5 := make([]byte, len(m.PositiveDelta)*10)
-		for _, num := range m.PositiveDelta {
-			x4 := (uint64(num) << 1) ^ uint64((num >> 63))
-			for x4 >= 1<<7 {
-				dAtA5[j3] = uint8(uint64(x4)&0x7f | 0x80)
-				j3++
-				x4 >>= 7
-			}
-			dAtA5[j3] = uint8(x4)
-			j3++
-		}
-		i -= j3
-		copy(dAtA[i:], dAtA5[:j3])
-		i = encodeVarintMetrics(dAtA, i, uint64(j3))
-		i--
-		dAtA[i] = 0x6a
-	}
-	if len(m.PositiveSpan) > 0 {
-		for iNdEx := len(m.PositiveSpan) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PositiveSpan[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x62
-		}
-	}
-	if len(m.NegativeCount) > 0 {
-		for iNdEx := len(m.NegativeCount) - 1; iNdEx >= 0; iNdEx-- {
-			f6 := math.Float64bits(float64(m.NegativeCount[iNdEx]))
-			i -= 8
-			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f6))
-		}
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.NegativeCount)*8))
-		i--
-		dAtA[i] = 0x5a
-	}
-	if len(m.NegativeDelta) > 0 {
-		var j7 int
-		dAtA9 := make([]byte, len(m.NegativeDelta)*10)
-		for _, num := range m.NegativeDelta {
-			x8 := (uint64(num) << 1) ^ uint64((num >> 63))
-			for x8 >= 1<<7 {
-				dAtA9[j7] = uint8(uint64(x8)&0x7f | 0x80)
-				j7++
-				x8 >>= 7
-			}
-			dAtA9[j7] = uint8(x8)
-			j7++
-		}
-		i -= j7
-		copy(dAtA[i:], dAtA9[:j7])
-		i = encodeVarintMetrics(dAtA, i, uint64(j7))
-		i--
-		dAtA[i] = 0x52
-	}
-	if len(m.NegativeSpan) > 0 {
-		for iNdEx := len(m.NegativeSpan) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.NegativeSpan[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x4a
-		}
-	}
-	if m.ZeroCountFloat != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.ZeroCountFloat))))
-		i--
-		dAtA[i] = 0x41
-	}
-	if m.ZeroCount != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.ZeroCount))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.ZeroThreshold != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.ZeroThreshold))))
-		i--
-		dAtA[i] = 0x31
-	}
-	if m.Schema != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64((uint32(m.Schema)<<1)^uint32((m.Schema>>31))))
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.SampleCountFloat != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleCountFloat))))
-		i--
-		dAtA[i] = 0x21
-	}
-	if len(m.Bucket) > 0 {
-		for iNdEx := len(m.Bucket) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Bucket[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
+	if m.SampleCount != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.SampleCount))
 	}
 	if m.SampleSum != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleSum))))
-		i--
 		dAtA[i] = 0x11
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleSum))))
+		i += 8
 	}
-	if m.SampleCount != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.SampleCount))
-		i--
-		dAtA[i] = 0x8
+	if len(m.Bucket) > 0 {
+		for _, msg := range m.Bucket {
+			dAtA[i] = 0x1a
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
-	return len(dAtA) - i, nil
+	if m.SampleCountFloat != 0 {
+		dAtA[i] = 0x21
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.SampleCountFloat))))
+		i += 8
+	}
+	if m.Schema != 0 {
+		dAtA[i] = 0x28
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64((uint32(m.Schema)<<1)^uint32((m.Schema>>31))))
+	}
+	if m.ZeroThreshold != 0 {
+		dAtA[i] = 0x31
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.ZeroThreshold))))
+		i += 8
+	}
+	if m.ZeroCount != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.ZeroCount))
+	}
+	if m.ZeroCountFloat != 0 {
+		dAtA[i] = 0x41
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.ZeroCountFloat))))
+		i += 8
+	}
+	if len(m.NegativeSpan) > 0 {
+		for _, msg := range m.NegativeSpan {
+			dAtA[i] = 0x4a
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.NegativeDelta) > 0 {
+		var j2 int
+		dAtA4 := make([]byte, len(m.NegativeDelta)*10)
+		for _, num := range m.NegativeDelta {
+			x3 := (uint64(num) << 1) ^ uint64((num >> 63))
+			for x3 >= 1<<7 {
+				dAtA4[j2] = uint8(uint64(x3)&0x7f | 0x80)
+				j2++
+				x3 >>= 7
+			}
+			dAtA4[j2] = uint8(x3)
+			j2++
+		}
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(j2))
+		i += copy(dAtA[i:], dAtA4[:j2])
+	}
+	if len(m.NegativeCount) > 0 {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.NegativeCount)*8))
+		for _, num := range m.NegativeCount {
+			f5 := math.Float64bits(float64(num))
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f5))
+			i += 8
+		}
+	}
+	if len(m.PositiveSpan) > 0 {
+		for _, msg := range m.PositiveSpan {
+			dAtA[i] = 0x62
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.PositiveDelta) > 0 {
+		var j6 int
+		dAtA8 := make([]byte, len(m.PositiveDelta)*10)
+		for _, num := range m.PositiveDelta {
+			x7 := (uint64(num) << 1) ^ uint64((num >> 63))
+			for x7 >= 1<<7 {
+				dAtA8[j6] = uint8(uint64(x7)&0x7f | 0x80)
+				j6++
+				x7 >>= 7
+			}
+			dAtA8[j6] = uint8(x7)
+			j6++
+		}
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(j6))
+		i += copy(dAtA[i:], dAtA8[:j6])
+	}
+	if len(m.PositiveCount) > 0 {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.PositiveCount)*8))
+		for _, num := range m.PositiveCount {
+			f9 := math.Float64bits(float64(num))
+			encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(f9))
+			i += 8
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Bucket) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1419,55 +1361,47 @@ func (m *Bucket) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Bucket) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Bucket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.CumulativeCountFloat != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.CumulativeCountFloat))))
-		i--
-		dAtA[i] = 0x21
-	}
-	if m.Exemplar != nil {
-		{
-			size, err := m.Exemplar.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
+	if m.CumulativeCount != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.CumulativeCount))
 	}
 	if m.UpperBound != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.UpperBound))))
-		i--
 		dAtA[i] = 0x11
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.UpperBound))))
+		i += 8
 	}
-	if m.CumulativeCount != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.CumulativeCount))
-		i--
-		dAtA[i] = 0x8
+	if m.Exemplar != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Exemplar.Size()))
+		n10, err10 := m.Exemplar.MarshalTo(dAtA[i:])
+		if err10 != nil {
+			return 0, err10
+		}
+		i += n10
 	}
-	return len(dAtA) - i, nil
+	if m.CumulativeCountFloat != 0 {
+		dAtA[i] = 0x21
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.CumulativeCountFloat))))
+		i += 8
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *BucketSpan) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1475,36 +1409,30 @@ func (m *BucketSpan) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *BucketSpan) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BucketSpan) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
+	if m.Offset != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64((uint32(m.Offset)<<1)^uint32((m.Offset>>31))))
 	}
 	if m.Length != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.Length))
-		i--
 		dAtA[i] = 0x10
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Length))
 	}
-	if m.Offset != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64((uint32(m.Offset)<<1)^uint32((m.Offset>>31))))
-		i--
-		dAtA[i] = 0x8
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	return len(dAtA) - i, nil
+	return i, nil
 }
 
 func (m *Exemplar) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1512,58 +1440,48 @@ func (m *Exemplar) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Exemplar) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Exemplar) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Timestamp != nil {
-		{
-			size, err := m.Timestamp.MarshalToSizedBuffer(dAtA[:i])
+	if len(m.Label) > 0 {
+		for _, msg := range m.Label {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
 			if err != nil {
 				return 0, err
 			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
+			i += n
 		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Value != 0 {
-		i -= 8
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i--
 		dAtA[i] = 0x11
+		i++
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i += 8
 	}
-	if len(m.Label) > 0 {
-		for iNdEx := len(m.Label) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Label[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
+	if m.Timestamp != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Timestamp.Size()))
+		n11, err11 := m.Timestamp.MarshalTo(dAtA[i:])
+		if err11 != nil {
+			return 0, err11
 		}
+		i += n11
 	}
-	return len(dAtA) - i, nil
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *Metric) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1571,105 +1489,87 @@ func (m *Metric) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Metric) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Metric) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if m.Histogram != nil {
-		{
-			size, err := m.Histogram.MarshalToSizedBuffer(dAtA[:i])
+	if len(m.Label) > 0 {
+		for _, msg := range m.Label {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
 			if err != nil {
 				return 0, err
 			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
+			i += n
 		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.TimestampMs != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.TimestampMs))
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.Untyped != nil {
-		{
-			size, err := m.Untyped.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Summary != nil {
-		{
-			size, err := m.Summary.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Counter != nil {
-		{
-			size, err := m.Counter.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Gauge != nil {
-		{
-			size, err := m.Gauge.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintMetrics(dAtA, i, uint64(size))
-		}
-		i--
 		dAtA[i] = 0x12
-	}
-	if len(m.Label) > 0 {
-		for iNdEx := len(m.Label) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Label[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Gauge.Size()))
+		n12, err12 := m.Gauge.MarshalTo(dAtA[i:])
+		if err12 != nil {
+			return 0, err12
 		}
+		i += n12
 	}
-	return len(dAtA) - i, nil
+	if m.Counter != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Counter.Size()))
+		n13, err13 := m.Counter.MarshalTo(dAtA[i:])
+		if err13 != nil {
+			return 0, err13
+		}
+		i += n13
+	}
+	if m.Summary != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Summary.Size()))
+		n14, err14 := m.Summary.MarshalTo(dAtA[i:])
+		if err14 != nil {
+			return 0, err14
+		}
+		i += n14
+	}
+	if m.Untyped != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Untyped.Size()))
+		n15, err15 := m.Untyped.MarshalTo(dAtA[i:])
+		if err15 != nil {
+			return 0, err15
+		}
+		i += n15
+	}
+	if m.TimestampMs != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.TimestampMs))
+	}
+	if m.Histogram != nil {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Histogram.Size()))
+		n16, err16 := m.Histogram.MarshalTo(dAtA[i:])
+		if err16 != nil {
+			return 0, err16
+		}
+		i += n16
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func (m *MetricFamily) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := m.MarshalTo(dAtA)
 	if err != nil {
 		return nil, err
 	}
@@ -1677,65 +1577,53 @@ func (m *MetricFamily) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *MetricFamily) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MetricFamily) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
+	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.XXX_unrecognized != nil {
-		i -= len(m.XXX_unrecognized)
-		copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	if len(m.Metric) > 0 {
-		for iNdEx := len(m.Metric) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Metric[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMetrics(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if m.Type != 0 {
-		i = encodeVarintMetrics(dAtA, i, uint64(m.Type))
-		i--
-		dAtA[i] = 0x18
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
 	}
 	if len(m.Help) > 0 {
-		i -= len(m.Help)
-		copy(dAtA[i:], m.Help)
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Help)))
-		i--
 		dAtA[i] = 0x12
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Help)))
+		i += copy(dAtA[i:], m.Help)
 	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintMetrics(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
+	if m.Type != 0 {
+		dAtA[i] = 0x18
+		i++
+		i = encodeVarintMetrics(dAtA, i, uint64(m.Type))
 	}
-	return len(dAtA) - i, nil
+	if len(m.Metric) > 0 {
+		for _, msg := range m.Metric {
+			dAtA[i] = 0x22
+			i++
+			i = encodeVarintMetrics(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.XXX_unrecognized != nil {
+		i += copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	return i, nil
 }
 
 func encodeVarintMetrics(dAtA []byte, offset int, v uint64) int {
-	offset -= sovMetrics(v)
-	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return base
+	return offset + 1
 }
 func (m *LabelPair) Size() (n int) {
 	if m == nil {
@@ -2162,7 +2050,10 @@ func (m *LabelPair) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -2224,7 +2115,10 @@ func (m *Gauge) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -2322,7 +2216,10 @@ func (m *Counter) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -2395,7 +2292,10 @@ func (m *Quantile) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -2510,7 +2410,10 @@ func (m *Summary) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -2572,7 +2475,10 @@ func (m *Untyped) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3092,7 +2998,10 @@ func (m *Histogram) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3220,7 +3129,10 @@ func (m *Bucket) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3311,7 +3223,10 @@ func (m *BucketSpan) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3443,7 +3358,10 @@ func (m *Exemplar) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3727,7 +3645,10 @@ func (m *Metric) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3895,7 +3816,10 @@ func (m *MetricFamily) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
+			if skippy < 0 {
+				return ErrInvalidLengthMetrics
+			}
+			if (iNdEx + skippy) < 0 {
 				return ErrInvalidLengthMetrics
 			}
 			if (iNdEx + skippy) > l {
@@ -3914,7 +3838,6 @@ func (m *MetricFamily) Unmarshal(dAtA []byte) error {
 func skipMetrics(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
-	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -3946,8 +3869,10 @@ func skipMetrics(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
+			return iNdEx, nil
 		case 1:
 			iNdEx += 8
+			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -3968,30 +3893,55 @@ func skipMetrics(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthMetrics
 			}
 			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupMetrics
+			if iNdEx < 0 {
+				return 0, ErrInvalidLengthMetrics
 			}
-			depth--
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowMetrics
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipMetrics(dAtA[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+				if iNdEx < 0 {
+					return 0, ErrInvalidLengthMetrics
+				}
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
 		case 5:
 			iNdEx += 4
+			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthMetrics
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
 	}
-	return 0, io.ErrUnexpectedEOF
+	panic("unreachable")
 }
 
 var (
-	ErrInvalidLengthMetrics        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowMetrics          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupMetrics = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthMetrics = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowMetrics   = fmt.Errorf("proto: integer overflow")
 )
