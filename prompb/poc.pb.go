@@ -22,7 +22,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type RuleHealth int32
 
@@ -101,7 +101,7 @@ func (m *LabelsPerSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return xxx_messageInfo_LabelsPerSeries.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
@@ -154,7 +154,7 @@ func (m *Group) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Group.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
@@ -249,7 +249,7 @@ func (m *Rule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Rule.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
@@ -347,7 +347,7 @@ func (m *Alert) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return xxx_messageInfo_Alert.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
+		n, err := m.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
@@ -492,7 +492,7 @@ var fileDescriptor_3ce085cb28d45762 = []byte{
 func (m *LabelsPerSeries) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -500,32 +500,40 @@ func (m *LabelsPerSeries) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *LabelsPerSeries) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelsPerSeries) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
 	if len(m.LabelsArray) > 0 {
-		for _, msg := range m.LabelsArray {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintPoc(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+		for iNdEx := len(m.LabelsArray) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.LabelsArray[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPoc(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0xa
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Group) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -533,86 +541,98 @@ func (m *Group) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Group) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Group) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.SeriesInPreviousEval) > 0 {
-		for _, msg := range m.SeriesInPreviousEval {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintPoc(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Rules) > 0 {
+		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPoc(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x3a
 		}
-	}
-	if len(m.StaleSeries) > 0 {
-		for _, msg := range m.StaleSeries {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintPoc(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.EvaluationTime != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationTime))
-	}
-	if m.LastEvaluation != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.LastEvaluation))
-	}
-	if m.ShouldRestore {
-		dAtA[i] = 0x28
-		i++
-		if m.ShouldRestore {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
 	}
 	if m.MarkStale {
-		dAtA[i] = 0x30
-		i++
+		i--
 		if m.MarkStale {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x30
 	}
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintPoc(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
+	if m.ShouldRestore {
+		i--
+		if m.ShouldRestore {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.LastEvaluation != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.LastEvaluation))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.EvaluationTime != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationTime))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.StaleSeries) > 0 {
+		for iNdEx := len(m.StaleSeries) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.StaleSeries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPoc(dAtA, i, uint64(size))
 			}
-			i += n
+			i--
+			dAtA[i] = 0x12
 		}
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if len(m.SeriesInPreviousEval) > 0 {
+		for iNdEx := len(m.SeriesInPreviousEval) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SeriesInPreviousEval[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPoc(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
 	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Rule) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -620,69 +640,79 @@ func (m *Rule) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Rule) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Rule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if len(m.Active) > 0 {
+		for iNdEx := len(m.Active) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Active[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPoc(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.LastError) > 0 {
+		i -= len(m.LastError)
+		copy(dAtA[i:], m.LastError)
+		i = encodeVarintPoc(dAtA, i, uint64(len(m.LastError)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.Health != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.Health))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.EvaluationTimestamp != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationTimestamp))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.EvaluationDuration != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationDuration))
+		i--
+		dAtA[i] = 0x18
 	}
 	if m.Restored {
-		dAtA[i] = 0x10
-		i++
+		i--
 		if m.Restored {
 			dAtA[i] = 1
 		} else {
 			dAtA[i] = 0
 		}
-		i++
+		i--
+		dAtA[i] = 0x10
 	}
-	if m.EvaluationDuration != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationDuration))
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPoc(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
 	}
-	if m.EvaluationTimestamp != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.EvaluationTimestamp))
-	}
-	if m.Health != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.Health))
-	}
-	if len(m.LastError) > 0 {
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(len(m.LastError)))
-		i += copy(dAtA[i:], m.LastError)
-	}
-	if len(m.Active) > 0 {
-		for _, msg := range m.Active {
-			dAtA[i] = 0x3a
-			i++
-			i = encodeVarintPoc(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
-	}
-	return i, nil
+	return len(dAtA) - i, nil
 }
 
 func (m *Alert) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
@@ -690,85 +720,97 @@ func (m *Alert) Marshal() (dAtA []byte, err error) {
 }
 
 func (m *Alert) MarshalTo(dAtA []byte) (int, error) {
-	var i int
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Alert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Id != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.Id))
-	}
-	if m.Labels != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.Labels.Size()))
-		n1, err1 := m.Labels.MarshalTo(dAtA[i:])
-		if err1 != nil {
-			return 0, err1
-		}
-		i += n1
-	}
-	if m.Annotations != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.Annotations.Size()))
-		n2, err2 := m.Annotations.MarshalTo(dAtA[i:])
-		if err2 != nil {
-			return 0, err2
-		}
-		i += n2
-	}
-	if m.Value != 0 {
-		dAtA[i] = 0x21
-		i++
-		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
-		i += 8
-	}
-	if m.ActiveAt != 0 {
-		dAtA[i] = 0x28
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.ActiveAt))
-	}
-	if m.FiredAt != 0 {
-		dAtA[i] = 0x30
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.FiredAt))
-	}
-	if m.ResolvedAt != 0 {
-		dAtA[i] = 0x38
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.ResolvedAt))
-	}
-	if m.LastSentAt != 0 {
-		dAtA[i] = 0x40
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.LastSentAt))
-	}
-	if m.ValidUntil != 0 {
-		dAtA[i] = 0x48
-		i++
-		i = encodeVarintPoc(dAtA, i, uint64(m.ValidUntil))
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
 	}
 	if m.State != 0 {
-		dAtA[i] = 0x50
-		i++
 		i = encodeVarintPoc(dAtA, i, uint64(m.State))
+		i--
+		dAtA[i] = 0x50
 	}
-	if m.XXX_unrecognized != nil {
-		i += copy(dAtA[i:], m.XXX_unrecognized)
+	if m.ValidUntil != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.ValidUntil))
+		i--
+		dAtA[i] = 0x48
 	}
-	return i, nil
+	if m.LastSentAt != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.LastSentAt))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.ResolvedAt != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.ResolvedAt))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.FiredAt != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.FiredAt))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ActiveAt != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.ActiveAt))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.Value != 0 {
+		i -= 8
+		encoding_binary.LittleEndian.PutUint64(dAtA[i:], uint64(math.Float64bits(float64(m.Value))))
+		i--
+		dAtA[i] = 0x21
+	}
+	if m.Annotations != nil {
+		{
+			size, err := m.Annotations.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPoc(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Labels != nil {
+		{
+			size, err := m.Labels.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPoc(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintPoc(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
 }
 
 func encodeVarintPoc(dAtA []byte, offset int, v uint64) int {
+	offset -= sovPoc(v)
+	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
 		v >>= 7
 		offset++
 	}
 	dAtA[offset] = uint8(v)
-	return offset + 1
+	return base
 }
 func (m *LabelsPerSeries) Size() (n int) {
 	if m == nil {
@@ -987,10 +1029,7 @@ func (m *LabelsPerSeries) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPoc
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPoc
 			}
 			if (iNdEx + skippy) > l {
@@ -1221,10 +1260,7 @@ func (m *Group) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPoc
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPoc
 			}
 			if (iNdEx + skippy) > l {
@@ -1450,10 +1486,7 @@ func (m *Rule) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPoc
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPoc
 			}
 			if (iNdEx + skippy) > l {
@@ -1720,10 +1753,7 @@ func (m *Alert) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPoc
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPoc
 			}
 			if (iNdEx + skippy) > l {
@@ -1742,6 +1772,7 @@ func (m *Alert) Unmarshal(dAtA []byte) error {
 func skipPoc(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
+	depth := 0
 	for iNdEx < l {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
@@ -1773,10 +1804,8 @@ func skipPoc(dAtA []byte) (n int, err error) {
 					break
 				}
 			}
-			return iNdEx, nil
 		case 1:
 			iNdEx += 8
-			return iNdEx, nil
 		case 2:
 			var length int
 			for shift := uint(0); ; shift += 7 {
@@ -1797,55 +1826,30 @@ func skipPoc(dAtA []byte) (n int, err error) {
 				return 0, ErrInvalidLengthPoc
 			}
 			iNdEx += length
-			if iNdEx < 0 {
-				return 0, ErrInvalidLengthPoc
-			}
-			return iNdEx, nil
 		case 3:
-			for {
-				var innerWire uint64
-				var start int = iNdEx
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return 0, ErrIntOverflowPoc
-					}
-					if iNdEx >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					innerWire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				innerWireType := int(innerWire & 0x7)
-				if innerWireType == 4 {
-					break
-				}
-				next, err := skipPoc(dAtA[start:])
-				if err != nil {
-					return 0, err
-				}
-				iNdEx = start + next
-				if iNdEx < 0 {
-					return 0, ErrInvalidLengthPoc
-				}
-			}
-			return iNdEx, nil
+			depth++
 		case 4:
-			return iNdEx, nil
+			if depth == 0 {
+				return 0, ErrUnexpectedEndOfGroupPoc
+			}
+			depth--
 		case 5:
 			iNdEx += 4
-			return iNdEx, nil
 		default:
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
+		if iNdEx < 0 {
+			return 0, ErrInvalidLengthPoc
+		}
+		if depth == 0 {
+			return iNdEx, nil
+		}
 	}
-	panic("unreachable")
+	return 0, io.ErrUnexpectedEOF
 }
 
 var (
-	ErrInvalidLengthPoc = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowPoc   = fmt.Errorf("proto: integer overflow")
+	ErrInvalidLengthPoc        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowPoc          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupPoc = fmt.Errorf("proto: unexpected end of group")
 )
