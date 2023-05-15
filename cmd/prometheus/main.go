@@ -33,6 +33,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/alecthomas/units"
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
@@ -45,10 +46,8 @@ import (
 	promlogflag "github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/common/version"
 	toolkit_web "github.com/prometheus/exporter-toolkit/web"
-	toolkit_webflag "github.com/prometheus/exporter-toolkit/web/kingpinflag"
 	"go.uber.org/atomic"
 	"go.uber.org/automaxprocs/maxprocs"
-	"gopkg.in/alecthomas/kingpin.v2"
 	"k8s.io/klog"
 	klogv2 "k8s.io/klog/v2"
 
@@ -57,6 +56,7 @@ import (
 	"github.com/prometheus/prometheus/discovery/legacymanager"
 	"github.com/prometheus/prometheus/discovery/targetgroup"
 	"github.com/prometheus/prometheus/model/exemplar"
+	"github.com/prometheus/prometheus/model/histogram"
 	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/model/metadata"
 	"github.com/prometheus/prometheus/model/relabel"
@@ -70,6 +70,7 @@ import (
 	"github.com/prometheus/prometheus/tracing"
 	"github.com/prometheus/prometheus/tsdb"
 	"github.com/prometheus/prometheus/tsdb/agent"
+	"github.com/prometheus/prometheus/util/documentcli"
 	"github.com/prometheus/prometheus/util/logging"
 	prom_runtime "github.com/prometheus/prometheus/util/runtime"
 	"github.com/prometheus/prometheus/web"
@@ -194,6 +195,10 @@ func (c *flagConfig) setFeatureListOptions(logger log.Logger) error {
 			case "no-default-scrape-port":
 				c.scrape.NoDefaultPort = true
 				level.Info(logger).Log("msg", "No default port will be appended to scrape targets' addresses.")
+			case "native-histograms":
+				c.tsdb.EnableNativeHistograms = true
+				c.scrape.EnableProtobufNegotiation = true
+				level.Info(logger).Log("msg", "Experimental native histogram support enabled.")
 			case "":
 				continue
 			case "promql-at-modifier", "promql-negative-offset":
@@ -203,6 +208,12 @@ func (c *flagConfig) setFeatureListOptions(logger log.Logger) error {
 			}
 		}
 	}
+
+	if c.tsdb.EnableNativeHistograms && c.tsdb.EnableMemorySnapshotOnShutdown {
+		c.tsdb.EnableMemorySnapshotOnShutdown = false
+		level.Warn(logger).Log("msg", "memory-snapshot-on-shutdown has been disabled automatically because memory-snapshot-on-shutdown and native-histograms cannot be enabled at the same time.")
+	}
+
 	return nil
 }
 
@@ -240,7 +251,10 @@ func main() {
 	a.Flag("web.listen-address", "Address to listen on for UI, API, and telemetry.").
 		Default("0.0.0.0:9090").StringVar(&cfg.web.ListenAddress)
 
-	webConfig := toolkit_webflag.AddFlags(a)
+	webConfig := a.Flag(
+		"web.config.file",
+		"[EXPERIMENTAL] Path to configuration file that can enable TLS or authentication.",
+	).Default("").String()
 
 	a.Flag("web.read-timeout",
 		"Maximum duration before timing out read of the request, and closing idle connections.").
@@ -395,10 +409,19 @@ func main() {
 	a.Flag("scrape.discovery-reload-interval", "Interval used by scrape manager to throttle target groups updates.").
 		Hidden().Default("5s").SetValue(&cfg.scrape.DiscoveryReloadInterval)
 
-	a.Flag("enable-feature", "Comma separated feature names to enable. Valid options: agent, exemplar-storage, expand-external-labels, memory-snapshot-on-shutdown, promql-at-modifier, promql-negative-offset, promql-per-step-stats, remote-write-receiver (DEPRECATED), extra-scrape-metrics, new-service-discovery-manager, auto-gomaxprocs, no-default-scrape-port. See https://prometheus.io/docs/prometheus/latest/feature_flags/ for more details.").
+	a.Flag("enable-feature", "Comma separated feature names to enable. Valid options: agent, exemplar-storage, expand-external-labels, memory-snapshot-on-shutdown, promql-at-modifier, promql-negative-offset, promql-per-step-stats, remote-write-receiver (DEPRECATED), extra-scrape-metrics, new-service-discovery-manager, auto-gomaxprocs, no-default-scrape-port, native-histograms. See https://prometheus.io/docs/prometheus/latest/feature_flags/ for more details.").
 		Default("").StringsVar(&cfg.featureList)
 
 	promlogflag.AddFlags(a, &cfg.promlogConfig)
+
+	a.Flag("write-documentation", "Generate command line documentation. Internal use.").Hidden().Action(func(ctx *kingpin.ParseContext) error {
+		if err := documentcli.GenerateMarkdown(a.Model(), os.Stdout); err != nil {
+			os.Exit(1)
+			return err
+		}
+		os.Exit(0)
+		return nil
+	}).Bool()
 
 	_, err := a.Parse(os.Args[1:])
 	if err != nil {
@@ -453,6 +476,14 @@ func main() {
 			absPath = cfg.configFile
 		}
 		level.Error(logger).Log("msg", fmt.Sprintf("Error loading config (--config.file=%s)", cfg.configFile), "file", absPath, "err", err)
+		os.Exit(2)
+	}
+	if _, err := cfgFile.GetScrapeConfigs(); err != nil {
+		absPath, pathErr := filepath.Abs(cfg.configFile)
+		if pathErr != nil {
+			absPath = cfg.configFile
+		}
+		level.Error(logger).Log("msg", fmt.Sprintf("Error loading scrape config files from config (--config.file=%q)", cfg.configFile), "file", absPath, "err", err)
 		os.Exit(2)
 	}
 	if cfg.tsdb.EnableExemplarStorage {
@@ -717,7 +748,11 @@ func main() {
 			name: "scrape_sd",
 			reloader: func(cfg *config.Config) error {
 				c := make(map[string]discovery.Configs)
-				for _, v := range cfg.ScrapeConfigs {
+				scfgs, err := cfg.GetScrapeConfigs()
+				if err != nil {
+					return err
+				}
+				for _, v := range scfgs {
 					c[v.JobName] = v.ServiceDiscoveryConfigs
 				}
 				return discoveryManagerScrape.ApplyConfig(c)
@@ -1380,6 +1415,10 @@ func (n notReadyAppender) AppendExemplar(ref storage.SeriesRef, l labels.Labels,
 	return 0, tsdb.ErrNotReady
 }
 
+func (n notReadyAppender) AppendHistogram(ref storage.SeriesRef, l labels.Labels, t int64, h *histogram.Histogram, fh *histogram.FloatHistogram) (storage.SeriesRef, error) {
+	return 0, tsdb.ErrNotReady
+}
+
 func (n notReadyAppender) UpdateMetadata(ref storage.SeriesRef, l labels.Labels, m metadata.Metadata) (storage.SeriesRef, error) {
 	return 0, tsdb.ErrNotReady
 }
@@ -1510,6 +1549,7 @@ type tsdbOptions struct {
 	EnableExemplarStorage          bool
 	MaxExemplars                   int64
 	EnableMemorySnapshotOnShutdown bool
+	EnableNativeHistograms         bool
 }
 
 func (opts tsdbOptions) ToTSDBOptions() tsdb.Options {
@@ -1528,6 +1568,7 @@ func (opts tsdbOptions) ToTSDBOptions() tsdb.Options {
 		EnableExemplarStorage:          opts.EnableExemplarStorage,
 		MaxExemplars:                   opts.MaxExemplars,
 		EnableMemorySnapshotOnShutdown: opts.EnableMemorySnapshotOnShutdown,
+		EnableNativeHistograms:         opts.EnableNativeHistograms,
 		OutOfOrderTimeWindow:           opts.OutOfOrderTimeWindow,
 	}
 }
