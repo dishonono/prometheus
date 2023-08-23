@@ -714,7 +714,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 			for metric, lset := range g.seriesInPreviousEval[i] {
 				if _, ok := seriesReturned[metric]; !ok {
 					// Series no longer exposed, mark it stale.
-					level.Info(g.logger).Log("name", rule.Name(), "index", i, "metric", "StaleMarker", "value")
+					level.Info(g.logger).Log("name", rule.Name(), "index", i, "metric", "StaleMarker", "value", 1)
 					_, err = app.Append(0, lset, timestamp.FromTime(ts), math.Float64frombits(value.StaleNaN))
 					unwrappedErr := errors.Unwrap(err)
 					if unwrappedErr == nil {
