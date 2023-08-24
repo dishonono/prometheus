@@ -697,7 +697,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 						level.Warn(g.logger).Log("name", rule.Name(), "index", i, "msg", "Rule evaluation result discarded", "err", err, "sample", s)
 					}
 				} else {
-					buf := [1024]byte{}
+					//buf := [1024]byte{}
 					//seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
 				}
 			}
