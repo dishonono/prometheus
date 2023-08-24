@@ -698,7 +698,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 					}
 				} else {
 					buf := [1024]byte{}
-					seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
+					//seriesReturned[string(s.Metric.Bytes(buf[:]))] = s.Metric
 				}
 			}
 			if numOutOfOrder > 0 {
