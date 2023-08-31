@@ -615,7 +615,50 @@ func readSeriesSet(ss storage.SeriesSet) (map[string][]promql.Point, error) {
 	return result, ss.Err()
 }
 
+func TestRawWorks(t *testing.T) {
+
+	seriesMemoryRepository := NewStaleSeriesRepositoryForTesting(7)
+	seriesMemoryRepository.PutAll(1, map[string]labels.Labels{})
+	seriesMemoryRepository.PutAll(2, map[string]labels.Labels{})
+	r3a := labels.FromStrings("l1", "v1")
+
+	seriesMemoryRepository.PutAll(3, map[string]labels.Labels{string(r3a.Bytes(nil)): r3a})
+
+	r3b := labels.FromStrings("l1", "v2")
+	seriesMemoryRepository.PutAll(4, map[string]labels.Labels{string(r3b.Bytes(nil)): r3b})
+
+	r3c := labels.FromStrings("l1", "v3")
+	seriesMemoryRepository.PutAll(5, map[string]labels.Labels{string(r3c.Bytes(nil)): r3c})
+
+	a2 := labels.FromStrings("l2", "v1")
+	a5 := labels.FromStrings("l5", "v5")
+	seriesMemoryRepository.PutAll(6, map[string]labels.Labels{string(a2.Bytes(nil)): a2, string(a5.Bytes(nil)): a5})
+
+	want := []map[string]labels.Labels{
+		nil,
+		{},
+		{},
+		{string(r3a.Bytes(nil)): labels.FromStrings("l1", "v1")},
+		{string(r3b.Bytes(nil)): labels.FromStrings("l1", "v2")},
+		{string(r3c.Bytes(nil)): labels.FromStrings("l1", "v3")},
+		{string(a2.Bytes(nil)): labels.FromStrings("l2", "v1"), string(a5.Bytes(nil)): labels.FromStrings("l5", "v5")},
+	}
+	require.Equal(t, want, seriesMemoryRepository.GetRawValues())
+	seriesMemoryRepository.Clear()
+
+}
+
 func TestCopyState(t *testing.T) {
+
+	seriesMemoryRepository := NewStaleSeriesRepositoryForTesting(7)
+	seriesMemoryRepository.PutAll(0, map[string]labels.Labels{})
+	seriesMemoryRepository.PutAll(1, map[string]labels.Labels{})
+	seriesMemoryRepository.PutAll(2, map[string]labels.Labels{})
+	seriesMemoryRepository.PutAll(3, map[string]labels.Labels{"r3a": labels.FromStrings("l1", "v1")})
+	seriesMemoryRepository.PutAll(4, map[string]labels.Labels{"r3b": labels.FromStrings("l1", "v2")})
+	seriesMemoryRepository.PutAll(5, map[string]labels.Labels{"r3c": labels.FromStrings("l1", "v3")})
+	seriesMemoryRepository.PutAll(6, map[string]labels.Labels{"a2": labels.FromStrings("l2", "v1")})
+
 	oldGroup := &Group{
 		rules: []Rule{
 			NewAlertingRule("alert", nil, 0, 0, labels.EmptyLabels(), labels.EmptyLabels(), labels.EmptyLabels(), "", true, nil),
@@ -626,16 +669,8 @@ func TestCopyState(t *testing.T) {
 			NewRecordingRule("rule3", nil, labels.FromStrings("l1", "v3")),
 			NewAlertingRule("alert2", nil, 0, 0, labels.FromStrings("l2", "v1"), labels.EmptyLabels(), labels.EmptyLabels(), "", true, nil),
 		},
-		seriesInPreviousEval: []map[string]labels.Labels{
-			{},
-			{},
-			{},
-			{"r3a": labels.FromStrings("l1", "v1")},
-			{"r3b": labels.FromStrings("l1", "v2")},
-			{"r3c": labels.FromStrings("l1", "v3")},
-			{"a2": labels.FromStrings("l2", "v1")},
-		},
-		evaluationTime: time.Second,
+		seriesInPreviousEval: seriesMemoryRepository,
+		evaluationTime:       time.Second,
 	}
 	oldGroup.rules[0].(*AlertingRule).active[42] = nil
 	newGroup := &Group{
@@ -649,7 +684,7 @@ func TestCopyState(t *testing.T) {
 			NewAlertingRule("alert2", nil, 0, 0, labels.FromStrings("l2", "v1"), labels.EmptyLabels(), labels.EmptyLabels(), "", true, nil),
 			NewRecordingRule("rule4", nil, labels.EmptyLabels()),
 		},
-		seriesInPreviousEval: make([]map[string]labels.Labels, 8),
+		seriesInPreviousEval: NewStaleSeriesRepositoryForTesting(8),
 	}
 	newGroup.CopyState(oldGroup)
 
@@ -663,7 +698,7 @@ func TestCopyState(t *testing.T) {
 		{"a2": labels.FromStrings("l2", "v1")},
 		nil,
 	}
-	require.Equal(t, want, newGroup.seriesInPreviousEval)
+	require.Equal(t, want, newGroup.seriesInPreviousEval.GetRawValues())
 	require.Equal(t, oldGroup.rules[0], newGroup.rules[3])
 	require.Equal(t, oldGroup.evaluationTime, newGroup.evaluationTime)
 	require.Equal(t, oldGroup.lastEvaluation, newGroup.lastEvaluation)
@@ -673,17 +708,19 @@ func TestCopyState(t *testing.T) {
 func TestDeletedRuleMarkedStale(t *testing.T) {
 	st := teststorage.New(t)
 	defer st.Close()
+	seriesMemoryRepository := NewStaleSeriesRepositoryForTesting(1)
+	seriesMemoryRepository.PutAll(0, map[string]labels.Labels{
+		"r1": labels.FromStrings("l1", "v1"),
+	})
 	oldGroup := &Group{
 		rules: []Rule{
 			NewRecordingRule("rule1", nil, labels.FromStrings("l1", "v1")),
 		},
-		seriesInPreviousEval: []map[string]labels.Labels{
-			{"r1": labels.FromStrings("l1", "v1")},
-		},
+		seriesInPreviousEval: seriesMemoryRepository,
 	}
 	newGroup := &Group{
 		rules:                []Rule{},
-		seriesInPreviousEval: []map[string]labels.Labels{},
+		seriesInPreviousEval: NewStaleSeriesRepositoryForTesting(1),
 		opts: &ManagerOptions{
 			Appendable: st,
 		},
@@ -715,6 +752,9 @@ func TestUpdate(t *testing.T) {
 	expected := map[string]labels.Labels{
 		"test": labels.FromStrings("name", "value"),
 	}
+	seriesMemoryRepository := NewStaleSeriesRepositoryForTesting(1)
+	seriesMemoryRepository.PutAll(0, expected)
+
 	st := teststorage.New(t)
 	defer st.Close()
 	opts := promql.EngineOpts{
@@ -739,16 +779,14 @@ func TestUpdate(t *testing.T) {
 	require.Greater(t, len(ruleManager.groups), 0, "expected non-empty rule groups")
 	ogs := map[string]*Group{}
 	for h, g := range ruleManager.groups {
-		g.seriesInPreviousEval = []map[string]labels.Labels{
-			expected,
-		}
+		g.seriesInPreviousEval = seriesMemoryRepository
 		ogs[h] = g
 	}
 
 	err = ruleManager.Update(10*time.Second, files, labels.EmptyLabels(), "", nil)
 	require.NoError(t, err)
 	for h, g := range ruleManager.groups {
-		for _, actual := range g.seriesInPreviousEval {
+		for _, actual := range g.seriesInPreviousEval.GetRawValues() {
 			require.Equal(t, expected, actual)
 		}
 		// Groups are the same because of no updates.

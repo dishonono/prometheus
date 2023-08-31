@@ -82,10 +82,15 @@ require (
 
 require (
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	git.mills.io/prologic/bitcask v1.0.2 // indirect
+	github.com/abcum/lcp v0.0.0-20201209214815-7a3f3840be81 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
+	github.com/gofrs/flock v0.8.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/plar/go-adaptive-radix-tree v1.0.4 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
 )
 
