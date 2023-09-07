@@ -655,7 +655,7 @@ func (g *Group) Eval(ctx context.Context, ts time.Time) {
 			)
 
 			app := g.opts.Appendable.Appender(ctx)
-			seriesReturned := make(map[string]labels.Labels, g.seriesInPreviousEval.KeyCount(i))
+			seriesReturned := make(map[string]labels.Labels, len(vector))
 			defer func() {
 				if err := app.Commit(); err != nil {
 					rule.SetHealth(HealthBad)

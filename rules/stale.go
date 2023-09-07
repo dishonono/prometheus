@@ -17,13 +17,13 @@ type StaleSeriesRepository interface {
 	ScanKeys(ruleId int, fn func(key string, valueFunc func() labels.Labels))
 	//Put(ruleId int, key string, value labels.Labels) error
 	PutAll(ruleId int, values map[string]labels.Labels) error
-	KeyCount(ruleId int) int
+	//KeyCount(ruleId int) int
 	CopyFrom(ruleId int, other StaleSeriesRepository, otherRuleId int) error
 	//GetNumberOfRules() int
 	GetRawValues() []map[string]labels.Labels
 }
 
-var NewStaleSeriesRepositoryForTesting = NewStaleSeriesImprovedDiskRepository
+var NewStaleSeriesRepositoryForTesting = NewStaleSeriesMemoryRepository
 
 /////////////////////////// StaleSeriesMemoryRepository ///////////////////////////
 
